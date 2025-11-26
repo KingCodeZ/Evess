@@ -1,0 +1,980 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Birthday! 💖</title>
+    <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            overflow-x: hidden;
+        }
+
+        /* Quiz Page Styles */
+        .quiz-page {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #ffe5e5 0%, #ffd4b8 50%, #ffb89c 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Cute floating chibi animals */
+        .chibi {
+            position: absolute;
+            font-size: 40px;
+            animation: float 3s ease-in-out infinite;
+            opacity: 0.6;
+        }
+        .chibi img{
+            height: 50px;
+            width: 50px;
+        }
+
+        .chibi:nth-child(1) { top: 10%; left: 10%; animation-delay: 0s; }
+        .chibi:nth-child(2) { top: 20%; right: 15%; animation-delay: 1s; }
+        .chibi:nth-child(3) { bottom: 15%; left: 20%; animation-delay: 2s; }
+        .chibi:nth-child(4) { bottom: 25%; right: 10%; animation-delay: 1.5s; }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+
+        .quiz-container {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 40px 30px;
+            border-radius: 30px;
+            box-shadow: 0 20px 60px rgba(255, 105, 180, 0.3);
+            text-align: center;
+            max-width: 400px;
+            width: 90%;
+            z-index: 10;
+        }
+
+        .quiz-container h2 {
+            color: #ff6b9d;
+            font-size: 22px;
+            margin-bottom: 15px;
+            line-height: 1.4;
+        }
+
+        .quiz-question {
+            color: #666;
+            margin: 20px 0;
+            font-size: 15px;
+            line-height: 1.6;
+        }
+
+        .quiz-progress {
+            color: #ff8ba7;
+            font-weight: 600;
+            margin-bottom: 10px;
+            font-size: 14px;
+        }
+
+        .quiz-options {
+            margin: 25px 0;
+        }
+
+        .quiz-option {
+            background: linear-gradient(135deg, #ffb3ba, #ffcc99);
+            border: none;
+            padding: 15px 20px;
+            margin: 10px 0;
+            border-radius: 20px;
+            color: white;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            width: 100%;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(255, 179, 186, 0.4);
+            text-align: left;
+            line-height: 1.4;
+        }
+
+        .quiz-option:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(255, 179, 186, 0.6);
+        }
+
+        /* Wrong answer feedback */
+        .wrong-feedback {
+            background: rgba(255, 221, 210, 0.5);
+            border: 2px solid #ff8ba7;
+            border-radius: 15px;
+            padding: 20px;
+            margin: 20px 0;
+            animation: shake 0.5s;
+        }
+
+        .wrong-feedback h3 {
+            color: #ff6b9d;
+            font-size: 20px;
+            margin-bottom: 10px;
+        }
+
+        .wrong-feedback p {
+            color: #666;
+            font-size: 15px;
+            line-height: 1.5;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            75% { transform: translateX(10px); }
+        }
+
+        .try-again-btn {
+            background: linear-gradient(135deg, #ff8ba7, #ffab91);
+            border: none;
+            padding: 12px 30px;
+            border-radius: 20px;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 15px;
+            font-size: 15px;
+            transition: all 0.3s;
+        }
+
+        .try-again-btn:hover {
+            transform: scale(1.05);
+        }
+
+        /* Landing Page Styles */
+        .landing-page {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #fff5f5 0%, #ffe5db 50%, #ffd4c1 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .floating-heart {
+            position: absolute;
+            color: #ff8ba7;
+            font-size: 30px;
+            animation: floatUp 6s ease-in infinite;
+            opacity: 0;
+        }
+
+        @keyframes floatUp {
+            0% {
+                transform: translateY(0) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-100vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        .landing-content {
+            text-align: center;
+            z-index: 10;
+        }
+
+        .landing-content h1 {
+            font-family: 'Pacifico', cursive;
+            color: #ff6b9d;
+            font-size: 36px;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(255, 139, 167, 0.3);
+        }
+
+        .surprise-btn {
+            background: linear-gradient(135deg, #ff8ba7, #ffab91);
+            border: none;
+            padding: 18px 40px;
+            border-radius: 30px;
+            color: white;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 30px;
+            box-shadow: 0 10px 30px rgba(255, 139, 167, 0.4);
+            transition: all 0.3s;
+        }
+
+        .surprise-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 15px 40px rgba(255, 139, 167, 0.6);
+        }
+
+        /* Memory Carousel Styles */
+        .carousel-page {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #fff8f5 0%, #ffebe0 100%);
+            padding: 40px 20px;
+        }
+
+        .carousel-container {
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        .carousel-title {
+            font-family: 'Pacifico', cursive;
+            color: #ff6b9d;
+            font-size: 28px;
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .carousel-slide {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 40px rgba(255, 171, 145, 0.3);
+            text-align: center;
+            border: 8px solid transparent;
+            background-clip: padding-box;
+            position: relative;
+        }
+
+        .carousel-slide::before {
+            content: '';
+            position: absolute;
+            top: -8px;
+            left: -8px;
+            right: -8px;
+            bottom: -8px;
+            background: linear-gradient(45deg, #ffcc99, #ff8ba7, #ffab91, #ffcc99);
+            border-radius: 20px;
+            z-index: -1;
+            animation: shimmer 3s linear infinite;
+            background-size: 300% 300%;
+        }
+
+        @keyframes shimmer {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .memory-emoji {
+            font-size: 80px;
+            margin: 20px 0;
+        }
+
+        .memory-caption {
+            color: #666;
+            font-size: 16px;
+            line-height: 1.6;
+            margin-top: 15px;
+        }
+
+        .carousel-nav {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+        }
+
+        .nav-btn {
+            background: linear-gradient(135deg, #ffb3ba, #ffcc99);
+            border: none;
+            padding: 12px 30px;
+            border-radius: 20px;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .nav-btn:hover {
+            transform: scale(1.05);
+        }
+
+        .next-section-btn {
+            background: linear-gradient(135deg, #ff8ba7, #ffab91);
+            border: none;
+            padding: 15px 35px;
+            border-radius: 25px;
+            color: white;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            margin: 30px auto;
+            display: block;
+            box-shadow: 0 8px 25px rgba(255, 139, 167, 0.4);
+            transition: all 0.3s;
+        }
+
+        .next-section-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 35px rgba(255, 139, 167, 0.6);
+        }
+
+        /* Letter Page Styles */
+        .letter-page {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #fff5f0 0%, #ffe5db 100%);
+            padding: 40px 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .letter-container {
+            background: white;
+            border-radius: 15px;
+            padding: 40px 30px;
+            max-width: 500px;
+            width: 90%;
+            box-shadow: 0 15px 50px rgba(255, 171, 145, 0.3);
+            border-left: 5px solid #ff8ba7;
+            position: relative;
+        }
+
+        .letter-title {
+            font-family: 'Pacifico', cursive;
+            color: #ff6b9d;
+            font-size: 24px;
+            margin-bottom: 25px;
+        }
+
+        .letter-text {
+            font-family: 'Poppins', sans-serif;
+            color: #555;
+            font-size: 16px;
+            line-height: 1.8;
+            min-height: 200px;
+        }
+
+        .cursor {
+            display: inline-block;
+            width: 2px;
+            height: 20px;
+            background: #ff6b9d;
+            animation: blink 0.8s infinite;
+            margin-left: 2px;
+        }
+
+        @keyframes blink {
+            0%, 50% { opacity: 1; }
+            51%, 100% { opacity: 0; }
+        }
+
+        /* Confetti */
+        .confetti {
+            position: fixed;
+            width: 10px;
+            height: 10px;
+            background: #ff8ba7;
+            position: absolute;
+            animation: confettiFall 3s ease-in forwards;
+        }
+
+        @keyframes confettiFall {
+            0% {
+                transform: translateY(0) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(100vh) rotate(720deg);
+                opacity: 0;
+            }
+        }
+
+        /* Reasons Section */
+        .reasons-page {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #fff8f5 0%, #ffebe0 100%);
+            padding: 40px 20px;
+        }
+
+        .reasons-title {
+            font-family: 'Pacifico', cursive;
+            color: #ff6b9d;
+            font-size: 28px;
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .reason-item {
+            background: white;
+            padding: 25px;
+            margin: 20px auto;
+            max-width: 400px;
+            border-radius: 20px;
+            box-shadow: 0 8px 30px rgba(255, 171, 145, 0.2);
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.6s;
+        }
+
+        .reason-item.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .reason-icon {
+            font-size: 35px;
+            flex-shrink: 0;
+        }
+
+        .reason-text {
+            color: #666;
+            font-size: 16px;
+            line-height: 1.5;
+        }
+
+        /* Gift Page */
+        .gift-page {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #ffe5e5 0%, #ffd4b8 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .gift-box {
+            font-size: 120px;
+            cursor: pointer;
+            transition: all 0.3s;
+            animation: wiggle 1s ease-in-out infinite;
+        }
+
+        @keyframes wiggle {
+            0%, 100% { transform: rotate(0deg); }
+            25% { transform: rotate(-5deg); }
+            75% { transform: rotate(5deg); }
+        }
+
+        .gift-box:hover {
+            transform: scale(1.1);
+        }
+
+        .gift-message {
+            background: white;
+            padding: 40px;
+            border-radius: 25px;
+            box-shadow: 0 20px 60px rgba(255, 171, 145, 0.4);
+            text-align: center;
+            max-width: 400px;
+            animation: fadeIn 1s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.8); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        .gift-message h2 {
+            font-family: 'Pacifico', cursive;
+            color: #ff6b9d;
+            font-size: 28px;
+            margin-bottom: 20px;
+        }
+
+        .gift-message p {
+            color: #666;
+            font-size: 16px;
+            line-height: 1.8;
+        }
+
+        .sparkle {
+            position: fixed;
+            color: gold;
+            font-size: 20px;
+            pointer-events: none;
+            animation: sparkleFloat 2s ease-out forwards;
+        }
+
+        @keyframes sparkleFloat {
+            0% {
+                opacity: 1;
+                transform: translate(0, 0) scale(0);
+            }
+            50% {
+                transform: translate(var(--tx), var(--ty)) scale(1);
+            }
+            100% {
+                opacity: 0;
+                transform: translate(var(--tx), var(--ty)) scale(0);
+            }
+        }
+
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <audio style="display: none;" autoplay loop src="./Billie Eilish - WILDFLOWER (Official Lyric Video) - BillieEilishVEVO (youtube).mp3"></audio>
+    <!-- Quiz Page -->
+    <div class="quiz-page" id="quizPage">
+        <div class="chibi"><img src="./lion.png" alt=""></div>
+        <div class="chibi"><img src="./koalaa.png" alt=""></div>
+        <div class="chibi"><img src="./Gray cat.png" alt=""></div>
+        <div class="chibi"><img src="./doggy2.png" alt=""></div>
+        <div class="chibi"><img src="./doggy1.png" alt=""></div>
+        
+        <div class="quiz-container">
+            <div class="quiz-progress" id="quizProgress">Question 1 of 5</div>
+            <h2 id="quizQuestion">If I left without hugging you, what is the reason?</h2>
+            
+            <div id="quizContent">
+                <div class="quiz-options" id="quizOptions">
+                    <button class="quiz-option" onclick="checkAnswer(0)">You're smelling</button>
+                    <button class="quiz-option" onclick="checkAnswer(1)">I hate you</button>
+                    <button class="quiz-option" onclick="checkAnswer(2)">I have returned to my ashawo ways</button>
+                    <button class="quiz-option" onclick="checkAnswer(3)">I wasn't leaving, imma still come back and hug youuu</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Landing Page -->
+    <div class="landing-page hidden" id="landingPage">
+        <div class="landing-content">
+            <h1>Congratss, you got all questions rightt</h1>
+            <p style="color: #ff8ba7; font-size: 18px;">isn't it great when we are honest and face the truthhh</p>
+            <button class="surprise-btn" onclick="goToCarousel()">click me🌚🎀</button>
+        </div>
+    </div>
+
+  
+    <!-- Memory Carousel -->
+    <div class="carousel-page hidden" id="carouselPage">
+        <h2 class="carousel-title">...on some nonchalant shi...</h2>
+        <div class="carousel-container">
+            <div class="carousel-slide">
+                <div class="memory-emoji" id="memoryEmoji">🌙</div>
+                  <p class="memory-caption" id="memoryCaption">For every late night, the calls, hours of texting, falling asleep on calls</p>
+                  <p>I am grateful♥️</p>
+            </div>
+            <div class="carousel-nav">
+                <button class="nav-btn" onclick="prevMemory()">← Previous</button>
+                <button class="nav-btn" onclick="nextMemory()">Next →</button>
+            </div>
+        </div>
+        <button class="next-section-btn" onclick="goToLetter()">It'll be cool to click this button🙂</button>
+    </div>
+
+    <!-- Letter Page -->
+    <div class="letter-page hidden" id="letterPage">
+        <div class="letter-container">
+            <h2 class="letter-title"> A lil yapistle for youuu💕</h2>
+            <div class="letter-text" id="letterText"></div>
+        </div>
+        <button class="next-section-btn" onclick="goToReasons()" style="position: absolute; bottom: 30px; left: 50%; transform: translateX(-50%);">Continue →</button>
+    </div>
+
+    <!-- Reasons Section -->
+    <div class="reasons-page hidden" id="reasonsPage">
+        <h2 class="reasons-title">It's the big 1 8, soo...here are some 18 things i quite fancy bout yaa🧍🏾‍♂️✨</h2>
+        <div id="reasonsContainer"> </div>
+        <button class="next-section-btn" onclick="goToGift()"></button>
+    </div>
+
+    <!-- Gift Page -->
+    <div class="gift-page hidden" id="giftPage">
+        <div id="giftContent">
+            <div class="gift-box" onclick="openGift()"><img style="width: 300px; height: 300px;"  src="./cutegidt-removebg-preview (1).png" alt=""></div>
+            <p style="text-align: center; color: white; margin-top: 20px; font-size: 18px;">Tap the gift!</p>
+        </div>
+    </div>
+
+    <script>
+        // Customize these variables!
+        const herName = "Sarah";
+        
+        const memories = [
+            { emoji: "🌙", caption: "For every late night, the calls, hours of texting, falling asleep on calls" },
+            { emoji: "😭😂", caption: "For every laugh, smile, giggle..." },
+            { emoji: "😭🥀", caption: "For our odd lingo and inside jokessss" },
+            { emoji: "🧍🏾‍♂️", caption: "Every conversation, shallow, deep, ones of confiding, and even the crazies and the chill" },
+            { emoji: "🤍", caption: "For your presence and the moments i wont trade for 100 trillion dollars(..maybe)" },
+            { emoji: "✨", caption: "For your walk with God, the tongues, the hunger, the POWERSSSSSS and MYSTERIESSS not known to man" },
+            { emoji: "", caption: "For being you, Eveshoya" },
+        ];
+
+        const reasons = [
+            { icon: "✨" , text: "Your smileeeeee" },
+            { icon: "✨", text: "The lil annoyed pout and folding arms you dooo" },
+            { icon: "✨", text: "You get meee, you match mi freakk😝" },
+            { icon: "✨", text: "The way you give HOTTT gisttt and rant to meee, i lovee your rants" },
+            { icon: "✨", text: "You're so caring for your friendsss" },
+            { icon: "✨", text: "You give reall good advicee" },
+            { icon: "✨", text: "Your hugs broooo😔🙏🏾" },
+            { icon: "✨", text: "YOUR POWAERSSSS AND MYSTERIESSSSS" },
+            { icon: "✨", text: "Your beauty.....that needs it's own list brooo" },
+            { icon: "✨", text: "You're soo uniqueeee, i've genuienly have never met anyone like you, your lingo, mannerisms, everything.." },
+            { icon: "✨", text: "You be locked in, studying to show yourself approved!" },
+            { icon: "✨", text: "The hunger you have for God!...mhmmm!" },
+            { icon: "✨", text: "Your love for worship" },
+            { icon: "✨", text: "You got a greatt voiceee♥️" },
+            { icon: "✨", text: "You're soo kind, you've got a good heart" },
+            { icon: "✨", text: "You make ordinary moments special" },
+            { icon: "✨", text: "You." }, 
+            { icon: "✨", text: "You're 4'11." },    
+        ];
+
+        const letterText = `
+When i was in my free thinking era, i subscribed to the concept of time being a social construct,and stuff like years, months and birthdays having no meaning. I felt like if you were born in a time, after that time, that's it. Move on! Knowing you, you'd probably call me foolish for thinking such😭
+
+I'm glad i snapped out of that....cause the logic is flawed and science proves it as a very faulty argument. Plus, God created time and keeps us through the span of it. I'm glad he made us exist in the same timeline. I'm glad I'm here wishing you a happy birthday. 
+
+Solution Eveshoya Praiseworth. The one of which my keyboard has mastered our repertoire of words and sentences.❤️
+It remains a wonder and crazy how you and i are so close...and how much i senddddd you, cuz this was NOT THE PLAN. I mean it was like...oh..Emmy's friend, prolly curious about the accent, meh.
+
+Then oh,she emmanuel's friend , cool
+
+Then, oh, they're quite close, aren't they?
+
+Then, ahan why does she wanna follow us to the lake??
+
+Then, emmanuel and her defsss got sumn going on
+
+Then, hmm i guess she's kinda cool
+
+Then, okay this girl's vibe is valid
+
+Then, hey, we texting on ig
+
+Then, what kinda weird ass lingo does this woman have 😭
+
+Then, heyyy solutionnnn, wsg??
+
+Then, We talking bout vigorous sex and our experiences
+
+
+Then, " safe space remember "
+
+Then, Billie Eilish's wildflower and a lotta chickening out 
+
+Then, yeahh my hg y'all 
+
+Then, why this girl scolding me bout stuff
+
+Then, a ALOTTTAAAAAA hangouts , couple music sessions, pictures and vidoes
+
+Then, i realise ahan. This one is chosen by the Lord o😭 na mother in Israel be this ajeh 
+
+Then, couple hours and hours and hourssss of texting, calllsss and stuff
+Then, yeah i fw this person heavy and rate her a lotttttt
+
+Then, we unanimously decided, yeah, since we're both virgins who fear the Lord we should have an Njideka🧍🏾‍♂️✨️
+
+And now, here's a smile creeping on my face as i type this out cause i just saw a notification from you.
+
+ Time. 
+
+ That's all it takes to change someone from a passerby to an obim o🥰😍 , but for real tho, time is an artist, a story teller and some say an artisan ,and I'm glad how the spool threads of fate unfolds our story 
+
+
+I'm grateful for all the time we spend, I'm glad I'm spending time with you right now and i hope we spend a whole lot and even moree , cause i mean, you're worth every millisecond of it.
+
+Years, months, days...speaking of days, today's the one, you're obsessed ass decided to leave heaven and come meet me. Guyssss, are you seeing thisss, you had this shi planned like an 18 years long plan, just to meet me🧍🏾‍♂️
+I get I'm amazing but damnn...**tucks hair behind earrr
+
+Baby, I hope this new year gives you some of the best times you've ever had.
+
+Maybe time actually is a construct and we're overly happy beings celebrating a planet rotating around a star, the sun. Still on still upon even though, I'm beyond happy, i can tell you happy birthday and I'm glad you exist and wasn't stolen by wild goats as a kid or nu'n. 
+
+I really hoped for this to be more emotional and tear jerking but it seems this is all my soul pours out to you for now.
+
+Speaking of outpourings, there's one more drop i gotta let out
+
+I love you soooo muchhhh, shoyaaaa. So don't see me as a whore who tryna have vigorous seggz with 3/4 of the worlds young female population 😭
+
+I know i might not show it or effectively communicate it perfectly but i do and really care bout youuu okayyy, don't ever doubt it, and if you ever do, I'll be here, as a constant source of reassurance. 
+
+You're amazing, your skin is flawless, you're always the most beautiful person in the room, you're enough, your belly ain't huge or nu'n 😭, your body's perfect and everything you think is wrong or is a problem isn't. You're smart asf and yeah sure, you could read more and i know you will but yeah, c'mon you gonn smash them MBs and become the best doctorr your patients have ever had....or become a mummy GO and set the captives freeee, mother in israel ma, the groan of the spirit follows you, mama
+
+
+Sha, imma end this long ahhhhh yapistle😭 
+I lowk feel it ain't good enough, maybe my words can't express everything properly but i mean...my fingers and lips have other ways to express things apart from talking and typingggg....sooo
+
+
+HAPPY BIRTHDAY BABYYYYYYYYY
+I LOVE YOUUUUUUUUUUUUUUU
+BIG 18!!!!!
+
+
+......so wanna use the con....diments for jellof rice
+
+Byee✨️
+`;
+
+        // Quiz system - stores all 5 questions with their options and correct answers
+        const quizQuestions = [
+            {
+                question: "If I left without hugging you, what is the reason?",
+                options: [
+                    "You're smelling",
+                    "I hate you",
+                    "I have returned to my ashawo ways",
+                    "I wasn't leaving, imma still come back and hug youuu"
+                ],
+                correctAnswer: 3  
+            },
+            {
+                question: "Do I get tired of you?",
+                options: [
+                    "Yes",
+                    "Everytimeeee",
+                    "Sometimes.....",
+                    "NEVERR!"
+                ],
+                correctAnswer: 3
+            },
+            {
+                question: "What kinda music do you rock to?",
+                options: [
+                    "RnB",
+                    "Rock n Roll",
+                    "DJ music",
+                    "Afrobeats"
+                ],
+                correctAnswer: 2
+            },
+            {
+                question: "If I don't reply calls or texts what does it mean?",
+                options: [
+                    "I'm tired of you",
+                    "Sumn came up, I didn't see it or I was busy at the time",
+                    "I'm having a video call with my 26478478298 side chics",
+                    "Omo....I no too send you"
+                ],
+                correctAnswer: 1
+            },
+            {
+                question: "Do I love and care bout you?",
+                options: [
+                    "I only care about other women and will replace you or might already have",
+                    "Always. Never for one second will I stop",
+                    "Omo, e no too clear",
+                    "Only God our father knows",
+                    "Me, I'm a virgin o!"
+                ],
+                correctAnswer: 1
+            }
+        ];
+
+        let currentQuestionIndex = 0;
+        let currentMemoryIndex = 0;
+        let typingIndex = 0;
+        let typingInterval;
+
+        // This function checks if the selected answer is correct
+        function checkAnswer(selectedIndex) {
+            const currentQuestion = quizQuestions[currentQuestionIndex];
+            
+            if (selectedIndex === currentQuestion.correctAnswer) {
+                // Correct answer! Move to next question or finish quiz
+                currentQuestionIndex++;
+                
+                if (currentQuestionIndex < quizQuestions.length) {
+                    // Show next question
+                    displayQuestion();
+                } else {
+                    // All questions completed! Move to birthday surprise
+                    startJourney();
+                }
+            } else {
+                // Wrong answer! Show the "Wrong! Try again" message
+                showWrongFeedback();
+            }
+        }
+
+        // This function displays the current question and its options
+        function displayQuestion() {
+            const currentQuestion = quizQuestions[currentQuestionIndex];
+            document.getElementById('quizProgress').textContent = `Question ${currentQuestionIndex + 1} of 5`;
+            document.getElementById('quizQuestion').textContent = currentQuestion.question;
+            
+            // Build the options HTML
+            let optionsHTML = '<div class="quiz-options">';
+            currentQuestion.options.forEach((option, index) => {
+                optionsHTML += `<button class="quiz-option" onclick="checkAnswer(${index})">${option}</button>`;
+            });
+            optionsHTML += '</div>';
+            
+            document.getElementById('quizContent').innerHTML = optionsHTML;
+        }
+
+       
+        function showWrongFeedback() {
+            const feedbackHTML = `
+                  <div class="wrong-feedback">
+                    <h3>Wrong!🥀</h3>
+                    <p>Try again! You know the answer to this one... think deep in your heart, say the truth!, the truth shall set you free!</p>
+                    <button class="try-again-btn" onclick="displayQuestion()">Try Again</button>
+                </div>
+            `;
+            document.getElementById('quizContent').innerHTML = feedbackHTML;
+        }
+
+        // Create floating hearts on landing page
+        function createFloatingHearts() {
+            setInterval(() => {
+                const heart = document.createElement('div');
+                heart.className = 'floating-heart';
+                heart.innerHTML = '💗';
+                heart.style.left = Math.random() * 100 + '%';
+                heart.style.animationDelay = Math.random() * 2 + 's';
+                document.getElementById('landingPage').appendChild(heart);
+                
+                setTimeout(() => heart.remove(), 6000);
+            }, 800);
+        }
+
+        function startJourney() {
+            document.getElementById('quizPage').classList.add('hidden');
+            document.getElementById('landingPage').classList.remove('hidden');
+            createFloatingHearts();
+        }
+
+        function goToCarousel() {
+            document.getElementById('landingPage').classList.add('hidden');
+            document.getElementById('carouselPage').classList.remove('hidden');
+            updateMemoryDisplay();
+        }
+
+        function updateMemoryDisplay() {
+            document.getElementById('memoryEmoji').textContent = memories[currentMemoryIndex].emoji;
+            document.getElementById('memoryCaption').textContent = memories[currentMemoryIndex].caption;
+        }
+
+        function nextMemory() {
+            currentMemoryIndex = (currentMemoryIndex + 1) % memories.length;
+            updateMemoryDisplay();
+        }
+
+        function prevMemory() {
+            currentMemoryIndex = (currentMemoryIndex - 1 + memories.length) % memories.length;
+            updateMemoryDisplay();
+        }
+
+        function goToLetter() {
+            document.getElementById('carouselPage').classList.add('hidden');
+            document.getElementById('letterPage').classList.remove('hidden');
+            startTyping();
+        }
+
+        function startTyping() {
+            const letterElement = document.getElementById('letterText');
+            typingIndex = 0;
+            letterElement.innerHTML = '';
+            
+            typingInterval = setInterval(() => {
+                if (typingIndex < letterText.length) {
+                    letterElement.innerHTML = letterText.substring(0, typingIndex + 1) + '<span class="cursor"></span>';
+                    typingIndex++;
+                } else {
+                    clearInterval(typingInterval);
+                    letterElement.innerHTML = letterText;
+                    createConfetti();
+                }
+            }, 50);
+        }
+
+        function createConfetti() {
+            for (let i = 0; i < 50; i++) {
+                setTimeout(() => {
+                    const confetti = document.createElement('div');
+                    confetti.className = 'confetti';
+                    confetti.style.left = Math.random() * 100 + '%';
+                    confetti.style.top = '-10px';
+                    confetti.style.background = ['#ff8ba7', '#ffcc99', '#ffab91', '#ffd4b8'][Math.floor(Math.random() * 4)];
+                    document.getElementById('letterPage').appendChild(confetti);
+                    
+                    setTimeout(() => confetti.remove(), 3000);
+                }, i * 50);
+            }
+        }
+
+        function goToReasons() {
+            document.getElementById('letterPage').classList.add('hidden');
+            document.getElementById('reasonsPage').classList.remove('hidden');
+            
+            const container = document.getElementById('reasonsContainer');
+            reasons.forEach((reason, index) => {
+                const item = document.createElement('div');
+                item.className = 'reason-item';
+                item.innerHTML = `
+                    <div class="reason-icon">${reason.icon}</div>
+                    <div class="reason-text">${reason.text}</div>
+                `;
+                container.appendChild(item);
+                
+                setTimeout(() => {
+                    item.classList.add('visible');
+                }, index * 200);
+            });
+        }
+
+        function goToGift() {
+            document.getElementById('reasonsPage').classList.add('hidden');
+            document.getElementById('giftPage').classList.remove('hidden');
+        }
+
+        function openGift() {
+            const giftContent = document.getElementById('giftContent');
+            
+            // Create sparkles
+            for (let i = 0; i < 30; i++) {
+                setTimeout(() => {
+                    const sparkle = document.createElement('div');
+                    sparkle.className = 'sparkle';
+                    sparkle.innerHTML = '✨';
+                    sparkle.style.left = '50%';
+                    sparkle.style.top = '50%';
+                    
+                    const tx = (Math.random() - 0.5) * 300;
+                    const ty = (Math.random() - 0.5) * 300;
+                    sparkle.style.setProperty('--tx', tx + 'px');
+                    sparkle.style.setProperty('--ty', ty + 'px');
+                    
+                    document.body.appendChild(sparkle);
+                    setTimeout(() => sparkle.remove(), 2000);
+                }, i * 50);
+            }
+            
+            // Show message
+            setTimeout(() => {
+                giftContent.innerHTML = `
+                    <div class="gift-message">
+                      <h2>YOU GET MEEEEE FOR ONE WHOLE YEARRRRRRRRR!!!!!!</h2>
+                      <video autoplay loop muted style="width: 300px; height: 200px;" src="./Snapchat-60452252.mp4"></video>
+                      <p>You should be grateful ong, people kill for this shi🙂</p>
+                      <p>But you? You get me for a whole year. Lucky you!(Don't goon to my video😔🙏🏾)</p>
+
+                      
+                    </div>
+                `;
+            }, 2000);
+        }
+    </script>
+</body>
+</html>
