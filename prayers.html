@@ -1,0 +1,602 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>From King</title>
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --bg1: #fff6f3;
+      --bg2: #fff0f5;
+      --peach: #ffb6a6;
+      --pink: #ff9fb9;
+      --glass: rgba(255,255,255,0.65);
+      --glass-2: rgba(255,245,245,0.55);
+      --muted: #7b5b65;
+      --accent-glow: 0 8px 30px rgba(255,150,170,0.18);
+      --max-width: 920px;
+    }
+
+    html,body{
+      height:100%;
+      margin:0;
+      font-family: 'Inter', system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+      background: linear-gradient(180deg, #fffafc 0%, #fff7f2 40%, #fff1ee 100%);
+      color:#3b2b2b;
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+    }
+
+    /* Heavenly background: soft clouds + rays */
+    .scene{
+      min-height:100vh;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:48px 20px;
+      position:relative;
+      overflow:hidden;
+    }
+
+    /* soft cloud shapes */
+    .clouds::before,
+    .clouds::after{
+      content:"";
+      position:absolute;
+      width:140%;
+      height:60%;
+      left:-20%;
+      top:-10%;
+      background: radial-gradient(closest-side, rgba(255,255,255,0.95), rgba(255,255,255,0.85) 40%, rgba(255,255,255,0.6) 60%, rgba(255,240,240,0));
+      filter: blur(60px);
+      transform: rotate(-6deg);
+      opacity:0.9;
+      pointer-events:none;
+    }
+    .clouds::after{
+      top:auto;
+      bottom:-10%;
+      left:-10%;
+      transform: rotate(4deg);
+      filter: blur(48px);
+      opacity:0.8;
+    }
+
+    /* subtle light rays */
+    .rays{
+      position:absolute;
+      inset:0;
+      background-image: radial-gradient(ellipse at 50% 20%, rgba(255,240,250,0.25), transparent 20%),
+                        linear-gradient(180deg, rgba(255,240,245,0.2), transparent 40%);
+      mix-blend-mode: screen;
+      pointer-events:none;
+      z-index:0;
+    }
+
+    /* floating sparkles/particles */
+    .particles{
+      position:absolute;
+      inset:0;
+      pointer-events:none;
+      z-index:2;
+    }
+    .particle{
+      position:absolute;
+      width:8px;
+      height:8px;
+      border-radius:50%;
+      background: radial-gradient(circle at 30% 30%, #fff, #ffd8e0 60%);
+      box-shadow: 0 0 12px rgba(255,160,180,0.7);
+      opacity:0.9;
+      transform: translateY(0) scale(1);
+      animation: floatUp linear infinite;
+      will-change: transform, opacity;
+    }
+    @keyframes floatUp{
+      from { transform: translateY(40vh) scale(0.6); opacity:0; }
+      10% { opacity:1; }
+      to { transform: translateY(-20vh) scale(1.1); opacity:0; }
+    }
+
+    /* Card container */
+    .card{
+      width:100%;
+      max-width: var(--max-width);
+      background: linear-gradient(180deg, rgba(255,255,255,0.95), rgba(255,250,250,0.9));
+      border-radius:20px;
+      padding:34px;
+      box-shadow: var(--accent-glow);
+      backdrop-filter: blur(8px) saturate(120%);
+      position:relative;
+      z-index:3;
+      border: 1px solid rgba(255,210,220,0.35);
+    }
+
+    .flex{
+      display:flex;
+      gap:28px;
+      align-items:center;
+      justify-content:space-between;
+      flex-wrap:wrap;
+    }
+
+    .intro{
+      flex:1 1 520px;
+      min-width:260px;
+    }
+
+    .title{
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(20px, 3.2vw, 30px);
+      line-height:1.05;
+      color:#2c1d23;
+      letter-spacing: -0.02em;
+      text-shadow: 0 2px 8px rgba(255,200,220,0.35);
+    }
+
+    .typewriter{
+      display:inline-block;
+      margin-top:8px;
+      font-size: clamp(14px, 2.2vw, 18px);
+      color: #3f2a2f;
+      font-weight:600;
+      background: linear-gradient(90deg, rgba(255,245,247,0.6), rgba(255,245,245,0.4));
+      padding:8px 14px;
+      border-radius:12px;
+      box-shadow: 0 6px 20px rgba(200,150,170,0.08);
+      border: 1px solid rgba(255,220,230,0.6);
+      position:relative;
+      overflow:hidden;
+    }
+
+    /* Typewriter caret */
+    .typewriter .caret{
+      display:inline-block;
+      width:2px;
+      height:1.18em;
+      background:linear-gradient(180deg,#3b2b2b,#ffb6c4);
+      margin-left:6px;
+      transform-origin:center;
+      animation: blinkCaret 1s steps(1) infinite;
+      vertical-align:middle;
+      border-radius:1px;
+    }
+    @keyframes blinkCaret{
+      0%,50% { opacity:1; }
+      51%,100% { opacity:0; }
+    }
+
+    /* audio card */
+    .audio-card{
+      flex: 0 0 320px;
+      min-width:260px;
+      display:flex;
+      flex-direction:column;
+      gap:14px;
+      align-items:stretch;
+      justify-content:center;
+    }
+
+    .audio-visual{
+      background: linear-gradient(135deg, rgba(255,250,250,0.6), rgba(255,245,247,0.6));
+      border-radius:14px;
+      padding:14px;
+      border:1px solid rgba(255,220,230,0.5);
+      box-shadow: 0 12px 30px rgba(255,160,180,0.06);
+    }
+
+    .album{
+      display:flex;
+      gap:12px;
+      align-items:center;
+    }
+
+    .cover{
+      width:64px;
+      height:64px;
+      border-radius:10px;
+      background: linear-gradient(135deg, var(--pink), var(--peach));
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-weight:700;
+      color:white;
+      box-shadow: 0 8px 24px rgba(255,150,170,0.14);
+      flex-shrink:0;
+    }
+    .track-info{
+      font-size:14px;
+      color:var(--muted);
+    }
+    .track-info .title{
+      font-family: 'Playfair Display', serif;
+      font-size:15px;
+      color:#422c2f;
+      font-weight:600;
+    }
+
+    /* custom controls */
+    .controls{
+      margin-top:10px;
+      display:flex;
+      gap:12px;
+      align-items:center;
+    }
+
+    .btn{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:10px;
+      padding:10px 16px;
+      border-radius:999px;
+      background: linear-gradient(90deg, rgba(255,255,255,0.9), rgba(255,245,245,0.95));
+      border: 1px solid rgba(255,200,210,0.45);
+      box-shadow: 0 6px 18px rgba(255,150,170,0.08);
+      cursor:pointer;
+      transition: transform .18s ease, box-shadow .18s ease;
+      user-select:none;
+    }
+    .btn:active{ transform: translateY(1px) }
+    .btn.playing{
+      box-shadow: 0 10px 28px rgba(255,140,170,0.14);
+      transform: scale(1.02);
+    }
+
+    .play-icon{
+      width:18px;height:18px;display:inline-block;
+    }
+
+    .progress{
+      flex:1;
+      height:8px;
+      border-radius:8px;
+      background: linear-gradient(90deg, rgba(255,230,235,0.7), rgba(255,245,250,0.6));
+      overflow:hidden;
+      display:flex;
+      align-items:center;
+    }
+    .progress > .bar{
+      width:0%;
+      height:100%;
+      background: linear-gradient(90deg,var(--pink),var(--peach));
+      border-radius:8px;
+      transition: width 0.12s linear;
+      box-shadow: 0 6px 18px rgba(255,140,170,0.12) inset;
+    }
+
+    .time{
+      font-size:12px;color:var(--muted);
+      min-width:44px;text-align:right;
+    }
+
+    /* CTA */
+    .cta-wrap{
+      margin-top:22px;
+      display:flex;
+      gap:16px;
+      align-items:center;
+      flex-wrap:wrap;
+    }
+
+    .cta{
+      background: linear-gradient(90deg, rgba(255,150,170,0.95), rgba(255,190,160,0.95));
+      color:white;
+      padding:12px 20px;
+      border-radius:14px;
+      font-weight:700;
+      letter-spacing:0.02em;
+      cursor:pointer;
+      border: none;
+      box-shadow: 0 12px 36px rgba(255,150,170,0.18);
+      transition: transform .18s ease, box-shadow .18s ease, filter .18s ease;
+    }
+    .cta:hover{ transform: translateY(-3px); filter:brightness(1.02) }
+    .cta:active{ transform: translateY(-1px) }
+    .cta[disabled]{
+      opacity:0.6;
+      cursor:not-allowed;
+      transform:none;
+      box-shadow:none;
+    }
+
+    /* Prayer panel (hidden initially) */
+    .prayer-panel{
+      margin-top:22px;
+      background: linear-gradient(180deg, rgba(255,250,251,0.9), rgba(255,245,246,0.85));
+      border-radius:14px;
+      padding:18px;
+      border:1px solid rgba(255,220,225,0.6);
+      box-shadow: 0 14px 40px rgba(200,150,170,0.06);
+      font-family:'Playfair Display', serif;
+      color:#442e30;
+      font-size:18px;
+      line-height:1.6;
+      opacity:0;
+      transform: translateY(10px) scale(0.995);
+      transition: opacity .6s ease, transform .6s cubic-bezier(.2,.9,.2,1);
+      will-change: opacity, transform;
+    }
+    .prayer-panel.show{
+      opacity:1;
+      transform: translateY(0) scale(1);
+    }
+
+    /* small screens */
+    @media (max-width:720px){
+      .flex{ gap:18px; }
+      .audio-card{ order:-1; width:100%; }
+      .intro{ width:100%; }
+      .card{ padding:24px; border-radius:16px; }
+    }
+
+    /* subtle focus states */
+    button:focus, .btn:focus{
+      outline: 3px solid rgba(255,200,220,0.45);
+      outline-offset:4px;
+    }
+  </style>
+</head>
+<body>
+  <div class="scene clouds" role="main" aria-label="Heavenly Prayer Portal">
+    <div class="rays" aria-hidden="true"></div>
+
+    <!-- floating particles -->
+    <div class="particles" aria-hidden="true">
+      <!-- We'll generate particles via JS -->
+    </div>
+
+    <div class="card" role="region" aria-labelledby="portal-heading">
+      <div class="flex">
+        <div class="intro">
+          <h1 id="portal-heading" class="title">Since we're virgins, i mean it's not a birthday without prayers.</h1>
+
+          <!-- Typewriter block -->
+          <div class="typewriter" aria-live="polite" aria-atomic="true">
+            <span id="typewriter-text" class="typed"></span><span class="caret" aria-hidden="true"></span>
+          </div>
+
+          <!-- CTA & audio -->
+          <div class="cta-wrap" style="align-items:center;">
+            <div class="audio-card" aria-label="Prayer music player">
+              <div class="audio-visual">
+                <div class="album">
+                  <div class="cover" aria-hidden="true">♡</div>
+                  <div class="track-info">
+                    <div class="title"> The Sounds</div>
+                    <div style="font-size:12px;color:var(--muted)"> play to pray</div>
+                  </div>
+                </div>
+
+                <!-- Custom controls -->
+                <div class="controls" style="margin-top:12px;">
+                  <button id="playBtn" class="btn" title="Play/Pause" aria-pressed="false" aria-label="Play prayer music">
+                    <svg class="play-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                      <path id="playPath" d="M6 4l12 8-12 8V4z" fill="#7a2c34"></path>
+                    </svg>
+                    <span id="playText" style="font-size:13px;color:var(--muted);">Play</span>
+                  </button>
+
+                  <div class="progress" aria-hidden="true" style="min-width:140px;">
+                    <div class="bar" id="progressBar"></div>
+                  </div>
+
+                  <div class="time" id="timeDisplay">0:00</div>
+                </div>
+
+                <!-- Hidden native audio element; replace src with your file -->
+                <audio id="audio" preload="metadata">
+                  <source src="./Billie Eilish - WILDFLOWER (Official Lyric Video) - BillieEilishVEVO (youtube).mp3 " type="audio/mpeg">
+                </audio>
+
+                
+              </div>
+            </div>
+
+            <!-- CTA button (separate so layout flows nicely) -->
+            <div style="display:flex;align-items:center;">
+              <button id="revealBtn" class="cta" aria-controls="prayerPanel">Click Here to War and Unleash Powers</button>
+            </div>
+          </div>
+
+          <!-- Prayer panel (hidden until click) -->
+          <div id="prayerPanel" class="prayer-panel" role="region" aria-hidden="true" tabindex="-1" style="margin-bottom:0;">
+            <!-- Customize the prayers below. You can paste multiple prayers separated by <hr> if desired. -->
+            <p>
+              
+
+Father I thank you for your daughter. I thank you for the family she's born into, i thank you the fear of the lord has been instilled in her and she's come to know and love you on a personal level. Your word says, teach us to number our days...father the wisdom to act as she should according to your will this new age. Father bestow unto her.
+ </p>
+
+            <p style="margin-top:12px;">
+             Daddy, the different dimensions of yourself you plan reveal to her, daddy ready her for them, let the weight of your glory rest heavy upon her, let the favour she's received up till now be a little fragment of the one she'd receive in this new season. Solution, the earth and all it's inhabitants shall favour you. In the morning you're blessed , in the noon, evening, night, your going out and coming in, your waking and sleeping. You are blessed. Your food is blessed, your water is blessed. The mercies of the Lord will never run dry on your life. His grace will forever empower your endeavour. He'll never let you leave his side..
+            </p>
+
+            <p style="margin-top:12px;">
+             I pray you are adopted deeper into his sonship. May his grace work powerfully in you, and release all forms of wisdom and practical understanding. I pray you will fulfill the plan of God in your life. I pray God will impart to you the riches of the Spirit of wisdom and the Spirit of revelation to know him through your deepening intimacy with him. I pray the light of the Lord will illuminate your eyes till you experience the full revelation to that which he calls you unto. I pray you will continually experience the greatness of God's power. You will be filled with christ and christ alone. In Jesus' name. Less of the flesh, less of yourself and more of him. May his overwhelming love burn away every discomfort in you life, any struggle you have that only you and him know may he attend to them immediately because you are his beloved daughter, you are the most loved, most sacred and most favoured of the Lord. With the covenant on your life and the efficacy of your name, may people experience the beauty of Christ through you. I pray the spirit prays over and for you for the things revealed not to man. Your family and everyone around you will be blessed and satisfied because of you. You will never lose your light and fire.
+            </p>
+
+            <p style="margin-top:12px;font-weight:600;color:#6b3b3f;">
+              Amen.
+            </p>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    /***************************************
+     * Typewriter
+     ***************************************/
+    (function(){
+      const text = "it's been quite a day, glad it came, however now, we are about to LAY HOLD ON POWERS";
+      const dest = document.getElementById('typewriter-text');
+      const caret = document.querySelector('.caret');
+      const speed = 28; // ms per char (adjustable)
+      let i = 0;
+
+      function typeNext(){
+        if(i <= text.length - 1){
+          dest.textContent += text.charAt(i);
+          i++;
+          // small random variation to feel natural
+          setTimeout(typeNext, speed + (Math.random()*60));
+        } else {
+          // finished: blink less aggressively
+          caret.style.animation = 'blinkCaret 1.4s steps(1) infinite';
+          // Slight glowing effect after finish
+          dest.parentElement.style.boxShadow = '0 8px 28px rgba(255,150,170,0.14)';
+        }
+      }
+      // start typing after slight delay
+      setTimeout(typeNext, 700);
+    })();
+
+    /***************************************
+     * Particles generator
+     ***************************************/
+    (function(){
+      const container = document.querySelector('.particles');
+      const colors = ['#fff1f6', '#fff5f3', '#fff7f4'];
+      const count = 18;
+
+      for(let i=0;i<count;i++){
+        const p = document.createElement('div');
+        p.className = 'particle';
+        const size = Math.random()*12 + 6;
+        p.style.width = p.style.height = size + 'px';
+        p.style.left = (Math.random()*100) + '%';
+        p.style.top = (Math.random()*100) + '%';
+        p.style.animationDuration = (8 + Math.random()*10) + 's';
+        p.style.animationDelay = (Math.random()*4) + 's';
+        p.style.opacity = 0.7 + Math.random()*0.4;
+        container.appendChild(p);
+      }
+    })();
+
+    /***************************************
+     * Audio controls (custom)
+     ***************************************/
+    (function(){
+      const audio = document.getElementById('audio');
+      const playBtn = document.getElementById('playBtn');
+      const playText = document.getElementById('playText');
+      const playPath = document.getElementById('playPath');
+      const progressBar = document.getElementById('progressBar');
+      const timeDisplay = document.getElementById('timeDisplay');
+
+      // Safe fallback: if no source provided, show disabled play with tooltip
+      const hasSource = audio.querySelector('source') !== null;
+
+      function formatTime(sec){
+        if(isNaN(sec)) return '0:00';
+        const s = Math.floor(sec % 60).toString().padStart(2,'0');
+        const m = Math.floor(sec / 60);
+        return `${m}:${s}`;
+      }
+
+      // update progress UI
+      function updateProgress(){
+        const pct = (audio.currentTime / audio.duration) * 100 || 0;
+        progressBar.style.width = pct + '%';
+        timeDisplay.textContent = formatTime(audio.currentTime);
+      }
+
+      // toggle play/pause
+      playBtn.addEventListener('click', function(){
+        if(!hasSource){
+          alert('No audio source found. Replace the <audio> source in the HTML with your MP3 file to enable playback.');
+          return;
+        }
+        if(audio.paused){
+          audio.play();
+        } else {
+          audio.pause();
+        }
+      });
+
+      audio.addEventListener('play', function(){
+        playBtn.classList.add('playing');
+        playBtn.setAttribute('aria-pressed','true');
+        playText.textContent = 'Pause';
+        // change icon to pause
+        playPath.setAttribute('d', 'M6 4h4v16H6V4zm8 0h4v16h-4V4z');
+      });
+
+      audio.addEventListener('pause', function(){
+        playBtn.classList.remove('playing');
+        playBtn.setAttribute('aria-pressed','false');
+        playText.textContent = 'Play';
+        // change icon back to play
+        playPath.setAttribute('d', 'M6 4l12 8-12 8V4z');
+      });
+
+      audio.addEventListener('timeupdate', updateProgress);
+      audio.addEventListener('loadedmetadata', function(){
+        timeDisplay.textContent = formatTime(audio.currentTime || 0);
+      });
+
+      // click on progress to seek
+      document.querySelector('.progress').addEventListener('click', function(e){
+        if(!hasSource) return;
+        const rect = this.getBoundingClientRect();
+        const pct = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width));
+        audio.currentTime = pct * audio.duration;
+        updateProgress();
+      });
+
+      // keyboard space toggles play
+      document.addEventListener('keydown', function(e){
+        if(e.code === 'Space' && document.activeElement === document.body){
+          e.preventDefault();
+          if(hasSource) audio.paused ? audio.play() : audio.pause();
+        }
+      });
+    })();
+
+
+
+    (function(){
+  const revealBtn = document.getElementById('revealBtn');
+  const prayerPanel = document.getElementById('prayerPanel');
+
+  revealBtn.addEventListener('click', () => {
+
+    // Reset animation if user reloads or clicks again
+    prayerPanel.classList.remove('show');
+
+    // Force browser to reflow so animation restarts cleanly
+    void prayerPanel.offsetWidth;
+
+    // Apply reveal animation
+    prayerPanel.classList.add('show');
+    prayerPanel.setAttribute('aria-hidden', 'false');
+    prayerPanel.focus();
+  });
+})();
+
+    /***************************************
+     * Accessibility tweaks: focus styles for keyboard users
+     ***************************************/
+    (function(){
+      let keyboardMode = false;
+      document.addEventListener('keydown', (e) => {
+        if(e.key === 'Tab') {
+          keyboardMode = true;
+          document.body.classList.add('kb-focus');
+        }
+      });
+      document.addEventListener('mousedown', () => {
+        keyboardMode = false;
+        document.body.classList.remove('kb-focus');
+      });
+    })();
+  </script>
+</body>
+</html>
